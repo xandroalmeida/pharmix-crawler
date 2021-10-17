@@ -22,5 +22,4 @@ public class GreetingMain implements QuarkusApplication {
         return 0;
     }
 
-
 }

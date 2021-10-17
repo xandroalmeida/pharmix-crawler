@@ -5,6 +5,7 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import br.com.xandrix.pharmix.crawler.data.ProdutoData;
 import br.com.xandrix.pharmix.crawler.parsers.ParserFactory;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.crawler.CrawlController.WebCrawlerFactory;
@@ -17,6 +18,9 @@ public class PharmixCrawlerService {
 
 	@Inject
 	ParserFactory parserFactory;
+	
+	@Inject
+	ProdutoData produtoData;
 
 	@ConfigProperty(name = "crawl.number_of_crawlers")
 	int numberOfCrawlers;
@@ -26,7 +30,7 @@ public class PharmixCrawlerService {
 		crawlController.start(new WebCrawlerFactory<PharmixCrawler>() {
 			@Override
 			public PharmixCrawler newInstance() throws Exception {
-				return new PharmixCrawler(parserFactory);
+				return new PharmixCrawler(parserFactory, produtoData);
 			}
 		}, numberOfCrawlers);
 	}

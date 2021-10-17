@@ -20,5 +20,6 @@ public class Produto {
 	private String dosagem;
 	private String registroMS;
 	private String principioAtivo;
+	private String site;
 
 }
