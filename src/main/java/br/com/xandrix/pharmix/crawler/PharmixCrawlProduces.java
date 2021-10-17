@@ -22,6 +22,7 @@ public class PharmixCrawlProduces {
 		var config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setResumableCrawling(true);
+        config.setMaxDownloadSize(1048576 * 2);
         return config;
 		
 	}
@@ -38,6 +39,7 @@ public class PharmixCrawlProduces {
 	public RobotstxtConfig robotstxtConfig()
 	{
 		var robotstxtConfig = new RobotstxtConfig();
+		robotstxtConfig.setEnabled(false);
 		return robotstxtConfig;
 	}
 	

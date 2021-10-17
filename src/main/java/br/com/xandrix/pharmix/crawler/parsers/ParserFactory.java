@@ -1,20 +1,20 @@
 package br.com.xandrix.pharmix.crawler.parsers;
 
-import javax.enterprise.context.ApplicationScoped;
+import java.util.Optional;
 
-import org.apache.commons.lang3.NotImplementedException;
+import javax.enterprise.context.ApplicationScoped;
 
 import br.com.xandrix.pharmix.crawler.parsers.impl.DrogaRaiaParser;
 
 @ApplicationScoped
 public class ParserFactory {
 	
-	public ProdutoParser get(String domain) {
+	public Optional<ProdutoParser> get(String domain) {
 		switch (domain) {
 		case "drogaraia.com.br":
-			return new DrogaRaiaParser();
+			return Optional.of(new DrogaRaiaParser());
 		default:
-			throw new NotImplementedException(domain);
+			return Optional.empty();
 		}
 	}
 

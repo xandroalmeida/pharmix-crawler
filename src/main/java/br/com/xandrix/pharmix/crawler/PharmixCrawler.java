@@ -16,7 +16,7 @@ public class PharmixCrawler extends WebCrawler {
 	private ParserFactory parserFactory;
 	private ProdutoData produtoData;
 	
-	private static AtomicLong countTotalPages = new AtomicLong();
+	private static AtomicLong countTotalLinks = new AtomicLong();
 	private static AtomicLong countTotalPagesVisited = new AtomicLong();
 	private static AtomicLong countTotalProducts = new AtomicLong();
 	private static AtomicBoolean daemonFlag = new AtomicBoolean(true);
@@ -29,8 +29,12 @@ public class PharmixCrawler extends WebCrawler {
 			Runnable runnable = () -> {
 				var run = true;
 				while (run) {
-					System.out.println("TotalPages: " + countTotalPages.get() + " TotalPagesVisited: "
-							+ countTotalPagesVisited.get() + " TotalProducts: " + countTotalProducts.get());
+					System.out.println("TotalLinks: " + countTotalLinks.get() + 
+							" TotalPagesVisited: " + countTotalPagesVisited.get() + 
+							" TotalProducts: " + countTotalProducts.get());
+					System.out.println("NumberOfScheduledPages: " + getMyController().getFrontier().getNumberOfScheduledPages() +
+							" QueueLength: " + getMyController().getFrontier().getQueueLength() + 
+							" NumberOfProcessedPages: " + getMyController().getFrontier().getNumberOfProcessedPages());
 					try {
 						Thread.sleep(15 * 1000);
 					} catch (InterruptedException e) {
@@ -46,8 +50,17 @@ public class PharmixCrawler extends WebCrawler {
 
 	@Override
 	public boolean shouldVisit(Page referringPage, WebURL url) {
-		countTotalPages.incrementAndGet();
-		return parserFactory.get(referringPage.getWebURL().getDomain()).shouldVisit(referringPage);
+		countTotalLinks.incrementAndGet();
+		return parserFactory.get(referringPage.getWebURL().getDomain())
+				.map( parser -> parser.shouldVisit(referringPage))
+				.orElse(false);
+	}
+	
+	@Override
+	protected boolean shouldFollowLinksIn(WebURL url) {
+		return parserFactory.get(url.getDomain())
+				.map( parser -> parser.shouldFollowLinksIn(url))
+				.orElse(false);
 	}
 
 	@Override
@@ -56,15 +69,15 @@ public class PharmixCrawler extends WebCrawler {
 		try {
 
 			var html = new String(page.getContentData(), Optional.ofNullable(page.getContentCharset()).orElse("UTF-8"));
-			parserFactory.get(page.getWebURL().getDomain())
-			.parser(html)
-			.ifPresent(e -> {
-				e.setSite(page.getWebURL().getDomain());
-				e.setUrl(page.getWebURL().getURL());
-				produtoData.save(e);
-				countTotalProducts.incrementAndGet();
-			});
-
+			parserFactory.get(page.getWebURL().getDomain()).ifPresent(parser -> {
+				parser.parser(html)
+					.ifPresent(e -> {
+						e.setSite(page.getWebURL().getDomain());
+						e.setUrl(page.getWebURL().getURL());
+						produtoData.save(e);
+						countTotalProducts.incrementAndGet();
+					});
+				});
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}

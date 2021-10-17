@@ -9,16 +9,30 @@ import br.com.xandrix.pharmix.crawler.model.Produto;
 import br.com.xandrix.pharmix.crawler.parsers.DomParserUtils;
 import br.com.xandrix.pharmix.crawler.parsers.ProdutoParser;
 import edu.uci.ics.crawler4j.crawler.Page;
+import edu.uci.ics.crawler4j.url.WebURL;
 
 public class DrogaRaiaParser implements ProdutoParser {
 	
 	static private DomParserUtils domUtils = new DomParserUtils(); 
 	
 	@Override
+	public boolean shouldFollowLinksIn(WebURL url) {
+		return "drogaraia.com.br".equals(url.getDomain())
+				&& !(url.getURL().contains("?marca=") || 
+					 url.getURL().contains("?price=") ||
+					 url.getURL().contains("?beneficio=") ||
+					 url.getURL().contains("?cor=") ||
+					 url.getURL().contains("?vantagens=")
+					 );
+	}
+	
+	@Override
 	public boolean shouldVisit(Page page) {
-		var result =  ("drogaraia.com.br".equals(page.getWebURL().getDomain())
+		var url = page.getWebURL();
+		//System.out.println(url);
+		return ("drogaraia.com.br".equals(url.getDomain())
+				&& page.getContentType() != null 
 				&& page.getContentType().contains("html"));
-		return result;
 	}
 	
 	@Override

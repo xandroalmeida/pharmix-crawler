@@ -33,7 +33,6 @@ public class ProdutoData {
 				statement.setString(12, produto.getPrincipioAtivo());
 				statement.setString(13, produto.getSite());
 				statement.execute();
-				org.w3c.dom.Node a;
 			}
 
 		} catch (SQLException e) {

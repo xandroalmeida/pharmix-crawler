@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import br.com.xandrix.pharmix.crawler.model.Produto;
 import edu.uci.ics.crawler4j.crawler.Page;
+import edu.uci.ics.crawler4j.url.WebURL;
 
 /**
  * Interface de contrato para as classes responsávei de estrair as informações
@@ -29,6 +30,10 @@ public interface ProdutoParser {
 	 * @return
 	 */
 	default boolean shouldVisit(Page page) {
+		return true;
+	}
+	
+	default boolean shouldFollowLinksIn(WebURL url) {
 		return true;
 	}
 }
