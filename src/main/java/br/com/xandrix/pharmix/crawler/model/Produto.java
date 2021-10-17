@@ -2,11 +2,9 @@ package br.com.xandrix.pharmix.crawler.model;
 
 import java.math.BigDecimal;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-@Value
-@Builder
+@Data
 public class Produto {
 	private String nome;
 	private String fabricante;
@@ -21,5 +19,6 @@ public class Produto {
 	private String registroMS;
 	private String principioAtivo;
 	private String site;
+	private String url;
 
 }

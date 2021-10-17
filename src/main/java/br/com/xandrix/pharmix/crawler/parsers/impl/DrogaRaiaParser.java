@@ -6,13 +6,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import br.com.xandrix.pharmix.crawler.model.Produto;
-import br.com.xandrix.pharmix.crawler.model.Produto.ProdutoBuilder;
 import br.com.xandrix.pharmix.crawler.parsers.DomParserUtils;
 import br.com.xandrix.pharmix.crawler.parsers.ProdutoParser;
+import edu.uci.ics.crawler4j.crawler.Page;
 
 public class DrogaRaiaParser implements ProdutoParser {
 	
 	static private DomParserUtils domUtils = new DomParserUtils(); 
+	
+	@Override
+	public boolean shouldVisit(Page page) {
+		var result =  ("drogaraia.com.br".equals(page.getWebURL().getDomain())
+				&& page.getContentType().contains("html"));
+		return result;
+	}
 	
 	@Override
 	public Optional<Produto> parser(String html) {
@@ -21,53 +28,53 @@ public class DrogaRaiaParser implements ProdutoParser {
 	}
 
 	private Produto parseProduto(Element element) {
-		var pb = Produto.builder();
-		pb.nome(domUtils.getTextOfElement(element, "div.product-name > h1 > span").orElse(null));
-		processProductAttribute(element, pb);
-		pb.precoVenda(domUtils.getPrice(element, ".regular-price")
+		var produto = new Produto();
+		produto.setNome(domUtils.getTextOfElement(element, "div.product-name > h1 > span").orElse(null));
+		processProductAttribute(element, produto);
+		produto.setPrecoVenda(domUtils.getPrice(element, ".regular-price")
 				.orElse(domUtils.getPrice(element, ".special-price")
 						.orElse(null)));
-		pb.precoTabela(domUtils.getPrice(element, ".old-price").orElse(null));
-
-		return pb.build();
+		produto.setPrecoTabela(domUtils.getPrice(element, ".old-price").orElse(null));
+		
+		return produto;
 	}
 
-	private void processProductAttribute(Element parent, ProdutoBuilder pb) {
+	private void processProductAttribute(Element parent, Produto produto) {
 		domUtils.select(parent, "#product-attribute-specs-table > tbody > tr")
-				.ifPresent(rows -> rows.forEach(row -> processProductAttributeRow(row, pb)));
+				.ifPresent(rows -> rows.forEach(row -> processProductAttributeRow(row, produto)));
 	}
 
-	private void processProductAttributeRow(Element row, ProdutoBuilder pb) {
+	private void processProductAttributeRow(Element row, Produto produto) {
 		var label = domUtils.getTextOfElement(row, "th");
 		var data = domUtils.getTextOfElement(row, "td");
 		label.ifPresent(l -> {
 			switch (l.toLowerCase().trim()) {
 			case "código do produto":
-				pb.sku(data.orElse(null));
+				produto.setSku(data.orElse(null));
 				break;
 			case "marca":
-				pb.marca(data.orElse(null));
+				produto.setMarca(data.orElse(null));
 				break;
 			case "ean":
-				pb.ean(data.orElse(null));
+				produto.setEan(data.orElse(null));
 				break;
 			case "fabricante":
-				pb.fabricante(data.orElse(null));
+				produto.setFabricante(data.orElse(null));
 				break;
 			case "peso":
-				pb.peso(data.orElse(null));
+				produto.setPeso(data.orElse(null));
 				break;
 			case "quantidade":
-				pb.quantidade(data.orElse(null));
+				produto.setQuantidade(data.orElse(null));
 				break;
 			case "dosagem":
-				pb.dosagem(data.orElse(null));
+				produto.setDosagem(data.orElse(null));
 				break;
 			case "registro ms":
-				pb.registroMS(data.orElse(null));
+				produto.setRegistroMS(data.orElse(null));
 				break;
 			case "princípio ativo":
-				pb.principioAtivo(data.orElse(null));
+				produto.setPrincipioAtivo(data.orElse(null));
 				break;
 			default:
 				break;
