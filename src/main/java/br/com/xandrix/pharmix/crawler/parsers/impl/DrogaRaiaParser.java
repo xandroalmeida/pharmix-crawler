@@ -51,7 +51,7 @@ public class DrogaRaiaParser implements ProdutoParser {
 		
 		domUtils.selectFirst(element, "div.raia-arrasa").ifPresent(div -> {
 			produto.setPrecoPromocao(domUtils.getPrice(div, "span.price").orElse(null));
-			produto.setPromocao(domUtils.getTextOfElement(div, "p.qty").orElse(null));
+			produto.setPromocao(domUtils.getTextOfElement(div, "p.qty").orElse(null));	
 		});
 		
 		produto.setVendidoPor(domUtils.getTextOfElement(element, "div.sold-and-delivered > a").orElse(null));

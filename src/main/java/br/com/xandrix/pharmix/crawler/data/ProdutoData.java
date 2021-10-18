@@ -15,9 +15,10 @@ public class ProdutoData {
 	public void save(Produto produto) {
 		try (var conn = defaultDataSource.getConnection()) {
 			conn.setAutoCommit(true);
-			try (var statement = conn.prepareStatement("INSERT INTO crawler (nome,fabricante,marca,"
+			try (var statement = conn.prepareStatement("INSERT INTO crawler (lidoEm, nome,fabricante,marca,"
 					+ "precoTabela,precoVenda,ean,sku,quantidade,peso,dosagem,registroMS,"
-					+ "principioAtivo,lidoEm,site,url,urlParent,preco_promocao,promocao, vendidoPor)" + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?,?,?,?,?)")) {
+					+ "principioAtivo,site,url,urlParent,precopromocao,promocao, vendidoPor)" + 
+					" VALUES (CURRENT_TIMESTAMP,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
 				
 				statement.setString(1, produto.getNome());
 				statement.setString(2, produto.getFabricante());
