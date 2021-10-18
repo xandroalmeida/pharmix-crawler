@@ -67,6 +67,7 @@ public class PharmixCrawler extends WebCrawler {
 					.ifPresent(e -> {
 						e.setSite(page.getWebURL().getDomain());
 						e.setUrl(page.getWebURL().getURL());
+						e.setUrlParent(page.getWebURL().getParentUrl());
 						produtoData.save(e);
 						countTotalProducts.incrementAndGet();
 					});

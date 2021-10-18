@@ -16,5 +16,9 @@ CREATE TABLE crawler
 	lidoEm			TIMESTAMP,
 	site			VARCHAR(255),
 	url				VARCHAR(255),
+	parenturl		VARCHAR(255),
+	precoPromocao	DECIMAL(11,2),
+	promocao		VARCHAR(255),
+	vendidoPor		VARCHAR(255),
 	PRIMARY KEY (id)
 );

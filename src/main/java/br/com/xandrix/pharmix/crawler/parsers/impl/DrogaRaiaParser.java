@@ -3,6 +3,7 @@ package br.com.xandrix.pharmix.crawler.parsers.impl;
 import java.util.Optional;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import br.com.xandrix.pharmix.crawler.model.Produto;
@@ -21,7 +22,12 @@ public class DrogaRaiaParser implements ProdutoParser {
 				&& url.getSubDomain().equals("www")
 				&& referringPage.getContentType() != null 
 				&& referringPage.getContentType().contains("html"))
-				&& !url.getAttribute("rel").contains("nofollow");
+				&& !url.getAttribute("rel").contains("nofollow")
+				&& !url.getAttribute("class").contains("btn-login")
+				&& !url.getAttribute("class").contains("grid")
+				&& !url.getAttribute("class").contains("out-of-stock")
+				&& !url.getAttribute("class").contains("list");
+
 		//if (result) 
 		//	System.out.println(referringPage.getWebURL() + " -> "+ url);
 		return result;
@@ -31,17 +37,24 @@ public class DrogaRaiaParser implements ProdutoParser {
 	@Override
 	public Optional<Produto> parser(String html) {
 		var document = Jsoup.parse(html);
-		return domUtils.selectFirst(document, "div.product-view").map(element -> parseProduto(element));
+		return domUtils.selectFirst(document, "div.product-view").map(element -> parseProduto(document, element));
 	}
 
-	private Produto parseProduto(Element element) {
+	private Produto parseProduto(Document document, Element element) {
 		var produto = new Produto();
-		produto.setNome(domUtils.getTextOfElement(element, "div.product-name > h1 > span").orElse(null));
-		processProductAttribute(element, produto);
+		produto.setNome(domUtils.getTextOfElement(document, "div.breadcrumbs > ul > li.product").orElse(null));
+		processProductAttribute(document, produto);
 		produto.setPrecoVenda(domUtils.getPrice(element, ".regular-price")
 				.orElse(domUtils.getPrice(element, ".special-price")
 						.orElse(null)));
 		produto.setPrecoTabela(domUtils.getPrice(element, ".old-price").orElse(null));
+		
+		domUtils.selectFirst(element, "div.raia-arrasa").ifPresent(div -> {
+			produto.setPrecoPromocao(domUtils.getPrice(div, "span.price").orElse(null));
+			produto.setPromocao(domUtils.getTextOfElement(div, "p.qty").orElse(null));
+		});
+		
+		produto.setVendidoPor(domUtils.getTextOfElement(element, "div.sold-and-delivered > a").orElse(null));
 		
 		return produto;
 	}

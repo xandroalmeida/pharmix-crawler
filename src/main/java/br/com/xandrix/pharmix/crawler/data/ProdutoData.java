@@ -17,7 +17,7 @@ public class ProdutoData {
 			conn.setAutoCommit(true);
 			try (var statement = conn.prepareStatement("INSERT INTO crawler (nome,fabricante,marca,"
 					+ "precoTabela,precoVenda,ean,sku,quantidade,peso,dosagem,registroMS,"
-					+ "principioAtivo,lidoEm,site)" + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?)")) {
+					+ "principioAtivo,lidoEm,site,url,urlParent,preco_promocao,promocao, vendidoPor)" + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,?,?,?,?,?)")) {
 				
 				statement.setString(1, produto.getNome());
 				statement.setString(2, produto.getFabricante());
@@ -32,6 +32,12 @@ public class ProdutoData {
 				statement.setString(11, produto.getRegistroMS());
 				statement.setString(12, produto.getPrincipioAtivo());
 				statement.setString(13, produto.getSite());
+				statement.setString(14, produto.getUrl());
+				statement.setString(15, produto.getUrlParent());
+				statement.setBigDecimal(16, produto.getPrecoPromocao());
+				statement.setString(17, produto.getPromocao());
+				statement.setString(18, produto.getVendidoPor());
+				
 				statement.execute();
 			}
 

@@ -20,5 +20,8 @@ public class Produto {
 	private String principioAtivo;
 	private String site;
 	private String url;
-
+	private String urlParent;
+	private BigDecimal precoPromocao;
+	private String promocao;
+	private String vendidoPor;
 }
