@@ -27,13 +27,10 @@ public interface ProdutoParser {
 	 * 
 	 * Por padrão sempre retorna true
 	 * @param page
+	 * @param url 
 	 * @return
 	 */
-	default boolean shouldVisit(Page page) {
-		return true;
-	}
-	
-	default boolean shouldFollowLinksIn(WebURL url) {
+	default boolean shouldVisit(Page referringPage, WebURL url) {
 		return true;
 	}
 }

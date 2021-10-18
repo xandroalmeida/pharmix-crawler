@@ -16,23 +16,16 @@ public class DrogaRaiaParser implements ProdutoParser {
 	static private DomParserUtils domUtils = new DomParserUtils(); 
 	
 	@Override
-	public boolean shouldFollowLinksIn(WebURL url) {
-		return "drogaraia.com.br".equals(url.getDomain())
-				&& !(url.getURL().contains("?marca=") || 
-					 url.getURL().contains("?price=") ||
-					 url.getURL().contains("?beneficio=") ||
-					 url.getURL().contains("?cor=") ||
-					 url.getURL().contains("?vantagens=")
-					 );
-	}
-	
-	@Override
-	public boolean shouldVisit(Page page) {
-		var url = page.getWebURL();
-		//System.out.println(url);
-		return ("drogaraia.com.br".equals(url.getDomain())
-				&& page.getContentType() != null 
-				&& page.getContentType().contains("html"));
+	public boolean shouldVisit(Page referringPage,  WebURL url) {
+		var result = ("drogaraia.com.br".equals(url.getDomain())
+				&& url.getSubDomain().equals("www")
+				&& referringPage.getContentType() != null 
+				&& referringPage.getContentType().contains("html"))
+				&& !url.getAttribute("rel").contains("nofollow");
+		//if (result) 
+		//	System.out.println(referringPage.getWebURL() + " -> "+ url);
+		return result;
+
 	}
 	
 	@Override

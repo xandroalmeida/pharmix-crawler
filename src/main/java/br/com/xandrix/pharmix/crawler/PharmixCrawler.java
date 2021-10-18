@@ -52,14 +52,7 @@ public class PharmixCrawler extends WebCrawler {
 	public boolean shouldVisit(Page referringPage, WebURL url) {
 		countTotalLinks.incrementAndGet();
 		return parserFactory.get(referringPage.getWebURL().getDomain())
-				.map( parser -> parser.shouldVisit(referringPage))
-				.orElse(false);
-	}
-	
-	@Override
-	protected boolean shouldFollowLinksIn(WebURL url) {
-		return parserFactory.get(url.getDomain())
-				.map( parser -> parser.shouldFollowLinksIn(url))
+				.map( parser -> parser.shouldVisit(referringPage, url))
 				.orElse(false);
 	}
 
