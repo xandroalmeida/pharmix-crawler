@@ -30,8 +30,7 @@ public class PharmixCrawlProduces {
 	@Produces
 	@ApplicationScoped
 	public PageFetcher pageFetcher(CrawlConfig crawlConfig) {
-		var pageFetcher = new PageFetcher(crawlConfig);
-		return pageFetcher;
+		return new PageFetcher(crawlConfig);
 	}
 	
 	@Produces
@@ -46,8 +45,7 @@ public class PharmixCrawlProduces {
 	@Produces
 	@ApplicationScoped
 	public RobotstxtServer robotstxtServer(RobotstxtConfig robotstxtConfig, PageFetcher pageFetcher) {
-		var robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-		return robotstxtServer;
+		return new RobotstxtServer(robotstxtConfig, pageFetcher);
 	}
 	
 	@Produces
@@ -58,7 +56,7 @@ public class PharmixCrawlProduces {
 			crawlController.addSeed("https://www.drogaraia.com.br/");
 			return crawlController;
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new SystemError(e);
 		}
 	}
 }

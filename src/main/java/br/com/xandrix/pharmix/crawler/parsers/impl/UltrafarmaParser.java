@@ -17,7 +17,6 @@ public class UltrafarmaParser implements ProdutoParser {
 	
 	@Override
 	public boolean shouldVisit(Page referringPage,  WebURL url) {
-		System.out.println(referringPage.getWebURL() + " -> "+ url);
 		return ("drogaraia.com.br".equals(url.getDomain())
 				&& referringPage.getContentType() != null 
 				&& referringPage.getContentType().contains("html"))

@@ -18,7 +18,7 @@ public class DrogaRaiaParser implements ProdutoParser {
 	
 	@Override
 	public boolean shouldVisit(Page referringPage,  WebURL url) {
-		var result = ("drogaraia.com.br".equals(url.getDomain())
+		return  ("drogaraia.com.br".equals(url.getDomain())
 				&& url.getSubDomain().equals("www")
 				&& referringPage.getContentType() != null 
 				&& referringPage.getContentType().contains("html"))
@@ -27,11 +27,6 @@ public class DrogaRaiaParser implements ProdutoParser {
 				&& !url.getAttribute("class").contains("grid")
 				&& !url.getAttribute("class").contains("out-of-stock")
 				&& !url.getAttribute("class").contains("list");
-
-		//if (result) 
-		//	System.out.println(referringPage.getWebURL() + " -> "+ url);
-		return result;
-
 	}
 	
 	@Override
