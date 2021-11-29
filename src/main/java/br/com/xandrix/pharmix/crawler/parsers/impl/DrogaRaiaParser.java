@@ -14,7 +14,7 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class DrogaRaiaParser implements ProdutoParser {
 	
-	static private DomParserUtils domUtils = new DomParserUtils(); 
+	private static DomParserUtils domUtils = new DomParserUtils(); 
 	
 	@Override
 	public boolean shouldVisit(Page referringPage,  WebURL url) {
