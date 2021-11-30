@@ -24,4 +24,5 @@ public class Produto {
 	private BigDecimal precoPromocao;
 	private String promocao;
 	private String vendidoPor;
+	private String crawlerJobId;
 }

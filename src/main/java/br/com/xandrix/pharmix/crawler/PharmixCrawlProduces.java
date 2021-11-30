@@ -52,9 +52,7 @@ public class PharmixCrawlProduces {
 	@ApplicationScoped
 	public CrawlController crawlController(CrawlConfig crawlConfig, PageFetcher pageFetcher, RobotstxtServer robotstxtServer) {
 		try {
-			var crawlController = new CrawlController(crawlConfig, pageFetcher, robotstxtServer);
-			crawlController.addSeed("https://www.drogaraia.com.br/");
-			return crawlController;
+			return  new CrawlController(crawlConfig, pageFetcher, robotstxtServer);
 		} catch (Exception e) {
 			throw new SystemError(e);
 		}

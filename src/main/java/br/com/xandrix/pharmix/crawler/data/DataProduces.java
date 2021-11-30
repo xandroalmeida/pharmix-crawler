@@ -17,4 +17,10 @@ public class DataProduces {
 		return new ProdutoData(defaultDataSource);
 	}
 
+	@Produces
+	@ApplicationScoped
+	public CrawlerJobData crawlerJobData() {
+		return new CrawlerJobData(defaultDataSource);
+	}
+
 }

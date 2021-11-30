@@ -2,6 +2,7 @@ package br.com.xandrix.pharmix.crawler.data;
 
 import java.sql.SQLException;
 
+import br.com.xandrix.pharmix.crawler.SystemError;
 import br.com.xandrix.pharmix.crawler.model.Produto;
 import io.agroal.api.AgroalDataSource;
 
@@ -12,13 +13,13 @@ public class ProdutoData {
 		this.defaultDataSource = defaultDataSource;
 	}
 
-	public void save(Produto produto) {
+	public void create(Produto produto) {
 		try (var conn = defaultDataSource.getConnection()) {
 			conn.setAutoCommit(true);
-			try (var statement = conn.prepareStatement("INSERT INTO crawler (lidoEm, nome,fabricante,marca,"
+			try (var statement = conn.prepareStatement("INSERT INTO CrawlerProduto (lidoEm, nome,fabricante,marca,"
 					+ "precoTabela,precoVenda,ean,sku,quantidade,peso,dosagem,registroMS,"
-					+ "principioAtivo,site,url,urlParent,precopromocao,promocao, vendidoPor)" + 
-					" VALUES (CURRENT_TIMESTAMP,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+					+ "principioAtivo,site,url,urlParent,precopromocao,promocao, vendidoPor, crawlerJobId)" + 
+					" VALUES (CURRENT_TIMESTAMP,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
 				
 				statement.setString(1, produto.getNome());
 				statement.setString(2, produto.getFabricante());
@@ -38,13 +39,13 @@ public class ProdutoData {
 				statement.setBigDecimal(16, produto.getPrecoPromocao());
 				statement.setString(17, produto.getPromocao());
 				statement.setString(18, produto.getVendidoPor());
+				statement.setString(19, produto.getCrawlerJobId());
 				
 				statement.execute();
 			}
 
 		} catch (SQLException e) {
-
-			throw new RuntimeException(e);
+			throw new SystemError(e);
 		}
 	}
 

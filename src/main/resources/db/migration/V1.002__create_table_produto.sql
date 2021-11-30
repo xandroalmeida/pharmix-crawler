@@ -1,5 +1,4 @@
-CREATE TABLE crawler
-(
+CREATE TABLE CrawlerProduto (
 	id 				INT NOT NULL GENERATED ALWAYS AS IDENTITY,
 	nome			VARCHAR(255),	
 	fabricante		VARCHAR(255),
@@ -20,5 +19,8 @@ CREATE TABLE crawler
 	precoPromocao	DECIMAL(11,2),
 	promocao		VARCHAR(255),
 	vendidoPor		VARCHAR(255),
-	PRIMARY KEY (id)
+	crawlerJobId	VARCHAR(255) NOT NULL,
+
+	PRIMARY KEY (id),
+	CONSTRAINT fk_crawlerJobId FOREIGN KEY(crawlerJobId) REFERENCES CrawlerJob(id)
 );
