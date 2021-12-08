@@ -1,16 +1,18 @@
 package br.com.xandrix.pharmix.crawler.model;
 
-import java.util.Date;
+import java.time.Instant;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class CrawlerJob {
 
 	public CrawlerJob(String id) {
@@ -19,9 +21,9 @@ public class CrawlerJob {
 
 	private String id;
 	private String siteUrl;
-	private Date inicioEm;
-	private Date fimEm;
-	private Date atualizadoEm;
+	private Instant inicioEm;
+	private Instant fimEm;
+	private Instant atualizadoEm;
 	private Long totalLinks;
 	private Long totalPaginasVisitadas;
 	private Long totalProdutos;

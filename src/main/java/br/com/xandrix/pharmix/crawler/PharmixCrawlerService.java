@@ -34,7 +34,8 @@ public class PharmixCrawlerService {
 	int numberOfCrawlers;
 
 	public void run() {
-
+		if (true) return;
+		
 		var crawlerJob = CrawlerJob.builder()
 		.id(UUID.randomUUID().toString())
 		.siteUrl("https://www.drogaraia.com.br/")

@@ -10,7 +10,7 @@ import io.quarkus.runtime.annotations.QuarkusMain;
 public class GreetingMain implements QuarkusApplication {
 
     @Inject
-    PharmixCrawlerService service;
+    JobManager jobManager;
     
     public static void main(String... args) {
         Quarkus.run(GreetingMain.class, args);
@@ -18,7 +18,7 @@ public class GreetingMain implements QuarkusApplication {
 
     @Override
     public int run(String... args) {
-        service.run();
+    	jobManager.run();
         return 0;
     }
 
