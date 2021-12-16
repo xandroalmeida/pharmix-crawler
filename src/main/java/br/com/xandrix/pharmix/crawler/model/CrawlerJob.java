@@ -15,12 +15,26 @@ import lombok.ToString;
 @ToString
 public class CrawlerJob {
 
+	public enum Situacao {
+		AGENDADO,
+		EXECUTANDO,
+		PAUSADO,
+		ENCERRADO,
+		FINALIZADO,
+		ERRO,
+	}
+	
+
+	public enum Comando {
+		ENCERRAR,
+		PAUSAR
+	}
+
 	public CrawlerJob(String id) {
 		this.id = id;
 	}
 
 	private String id;
-	private String siteUrl;
 	private Instant inicioEm;
 	private Instant fimEm;
 	private Instant atualizadoEm;
@@ -30,4 +44,11 @@ public class CrawlerJob {
 	private Long qtddPaginasAgendadas;
 	private Long tamanhoFila;
 	private Long qtddPaginasProcessadas;
+	private Long crawlerStoreId;
+	private Situacao situacao;
+	private Comando comando;
+
+	public boolean isResumed() {
+		return situacao == Situacao.EXECUTANDO && inicioEm != null;
+	}
 }
