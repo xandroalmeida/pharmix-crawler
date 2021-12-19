@@ -69,6 +69,21 @@ public class DomParserUtils {
 		return this.getTextOfElement(Optional.ofNullable(element), cssQuery);
 	}
 
+	/**
+	 * Obtém o atributo de um elemnto
+	 * Nullsafe
+	 * 
+	 * @param cssQuery
+	 * @param parent
+	 * @return
+	 */
+	public Optional<String> getAttrOfElement(Optional<Element> element, String cssQuery, String attr) {
+		return this.selectFirst(element, cssQuery).map(e -> e.attr(attr));
+	}
+
+	public Optional<String> getAttrOfElement(Element element, String cssQuery, String attr) {
+		return this.getAttrOfElement(Optional.ofNullable(element), cssQuery, attr);
+	}
 	
 	/**
 	 * Extrai o valor monetário de uma elemento
@@ -83,7 +98,9 @@ public class DomParserUtils {
 		DecimalFormat df = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Local));
 		df.setParseBigDecimal(true);
 		return this.getTextOfElement(element, cssQuery).map(txt -> {
-			txt = txt.substring(txt.indexOf("R$")+2).trim();
+			if (txt.indexOf("R$") >= 0) {
+				txt = txt.substring(txt.indexOf("R$")+2).trim();
+			}
  			try {
 				return  (BigDecimal) df.parse(txt);
 			} catch (ParseException e) {

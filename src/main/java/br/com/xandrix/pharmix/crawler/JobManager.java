@@ -9,9 +9,11 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import br.com.xandrix.pharmix.crawler.data.CrawlerErrorData;
 import br.com.xandrix.pharmix.crawler.data.CrawlerJobData;
 import br.com.xandrix.pharmix.crawler.data.CrawlerStoreData;
 import br.com.xandrix.pharmix.crawler.data.ProdutoData;
+import br.com.xandrix.pharmix.crawler.model.CrawlerError;
 import br.com.xandrix.pharmix.crawler.model.CrawlerJob;
 import br.com.xandrix.pharmix.crawler.model.CrawlerJob.Comando;
 import br.com.xandrix.pharmix.crawler.model.CrawlerJob.Situacao;
@@ -37,12 +39,15 @@ public class JobManager {
 
 	private ParserFactory parserFactory;
 
+	private CrawlerErrorData crawlerErrorData;
+
 	public JobManager(ParserFactory parserFactory, CrawlerJobData crawlerJobData, CrawlerStoreData crawlerStoreData,
-			ProdutoData produtoData) {
+			ProdutoData produtoData, CrawlerErrorData crawlerErrorData) {
 		this.parserFactory = parserFactory;
 		this.crawlerJobData = crawlerJobData;
 		this.crawlerStoreData = crawlerStoreData;
 		this.produtoData = produtoData;
+		this.crawlerErrorData = crawlerErrorData;
 	}
 
 	public void run() {
@@ -82,7 +87,8 @@ public class JobManager {
 
 			crawlConfig.setResumableCrawling(true);
 			crawlConfig.setCrawlStorageFolder(storageFolderPath.toAbsolutePath().toString());
-
+			crawlConfig.setMaxDownloadSize(1024*1024*10);
+			
 			var pageFetcher = new PageFetcher(crawlConfig);
 
 			var robotstxtConfig = new RobotstxtConfig();
@@ -115,11 +121,18 @@ public class JobManager {
 		crawlController.startNonBlocking(new WebCrawlerFactory<PharmixCrawler>() {
 			@Override
 			public PharmixCrawler newInstance() throws Exception {
-				return new PharmixCrawler(parserFactory, (p) -> {
-					p.setCrawlerJobId(cj.getId());
-					produtoData.create(p);
-					totalProdutos.getAndIncrement();
-				}, () -> totalLinks.getAndIncrement(), () -> totalPaginasVisitadas.getAndIncrement());
+				return new PharmixCrawler(parserFactory, 
+						(p) -> {
+							p.setCrawlerJobId(cj.getId());
+							produtoData.create(p);
+							totalProdutos.getAndIncrement();
+						}, 
+						() -> totalLinks.getAndIncrement(), 
+						() -> totalPaginasVisitadas.getAndIncrement(), 
+						(e) -> {
+							e.setCrawlerJobId(cj.getId());
+							crawlerErrorData.create(e);
+						});
 			}
 
 		}, 8);

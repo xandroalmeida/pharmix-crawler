@@ -49,6 +49,6 @@ public class CrawlerJob {
 	private Comando comando;
 
 	public boolean isResumed() {
-		return situacao == Situacao.EXECUTANDO && inicioEm != null;
+		return inicioEm != null;
 	}
 }

@@ -29,4 +29,9 @@ public class DataProduces {
 		return new CrawlerStoreData(defaultDataSource);
 	}
 
+	@Produces
+	@ApplicationScoped
+	public CrawlerErrorData crawlerErrorData() {
+		return new CrawlerErrorData(defaultDataSource);
+	}
 }
