@@ -17,7 +17,7 @@ public class UltrafarmaParser implements ProdutoParser {
 	
 	@Override
 	public boolean shouldVisit(Page referringPage,  WebURL url) {
-		return ("drogaraia.com.br".equals(url.getDomain())
+		return ("ultrafarma.com.br/".equals(url.getDomain())
 				&& referringPage.getContentType() != null 
 				&& referringPage.getContentType().contains("html"))
 				&& !url.getAttribute("rel").contains("nofollow");
@@ -43,16 +43,6 @@ public class UltrafarmaParser implements ProdutoParser {
 			return i >= 0 ? e.substring(i+1).trim() : e;
 		}).orElse(null));
 		
-		//domUtils.selectFirst(element, "#pdp-section-outras-informacoes > div > ul").ifPresent(infoElement -> {
-		//	domUtils.selectFirst(infoElement, "span[data-attr=cod_produto").ifPresent(e->produto.setSku(e.attr("data-attr-value")));
-		//	domUtils.selectFirst(infoElement, "span[data-attr=cod_ean").ifPresent(e->produto.setEan(e.attr("data-attr-value")));
-		//	domUtils.selectFirst(infoElement, "span[data-attr=attr-registroms").ifPresent(e->produto.setRegistroMS(e.attr("data-attr-value")));
-		//	domUtils.getTextOfElement(infoElement, "#attr-principioativo").ifPresent(e -> produto.setPrincipioAtivo(e.substring(e.indexOf(':')))
-		//	);
-		//});
-		
 		return produto;
 	}
-
-	
 }

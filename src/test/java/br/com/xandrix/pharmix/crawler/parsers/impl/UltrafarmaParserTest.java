@@ -49,6 +49,5 @@ public class UltrafarmaParserTest {
 					assertNotNull(null);
 				});
 	}
-
 	
 }
