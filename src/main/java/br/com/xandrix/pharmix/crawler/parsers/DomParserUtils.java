@@ -70,6 +70,22 @@ public class DomParserUtils {
 	}
 
 	/**
+	 * Obtém apenas o próprio texto de um elemnto
+	 * Nullsafe
+	 * 
+	 * @param cssQuery
+	 * @param parent
+	 * @return
+	 */
+	public Optional<String> getOwnTextOfElement(Optional<Element> element, String cssQuery) {
+		return this.selectFirst(element, cssQuery).map(e -> e.ownText());
+	}
+
+	public Optional<String> getOwnTextOfElement(Element element, String cssQuery) {
+		return this.getOwnTextOfElement(Optional.ofNullable(element), cssQuery);
+	}
+
+	/**
 	 * Obtém o atributo de um elemnto
 	 * Nullsafe
 	 * 
@@ -102,7 +118,8 @@ public class DomParserUtils {
 				txt = txt.substring(txt.indexOf("R$")+2).trim();
 			}
  			try {
-				return  (BigDecimal) df.parse(txt);
+ 				var value = df.parse(txt);
+				return  (BigDecimal) value;
 			} catch (ParseException e) {
 				return BigDecimal.ZERO;
 			}

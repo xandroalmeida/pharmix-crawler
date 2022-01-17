@@ -15,7 +15,7 @@ public class DrogasilParserTest {
 	@Test
 	public void testParser_2810() throws IOException {	
 		var html = IOUtils.resourceToString("/sites/drogasil/forxiga-10-mg-30-comprimidos-revestidos.html", Charset.defaultCharset());
-		new DragasilParser().parser(html).ifPresentOrElse(
+		new DrogasilParser().parser(html).ifPresentOrElse(
 				produto -> {
 					assertEquals("FORXIGA 10 MG 30 COMPRIMIDOS REVESTIDOS", produto.getNome());
 					assertEquals("Aché", produto.getMarca());

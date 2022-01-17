@@ -15,7 +15,7 @@ import br.com.xandrix.pharmix.crawler.parsers.ProdutoParser;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.url.WebURL;
 
-public class DragasilParser implements ProdutoParser {
+public class DrogasilParser implements ProdutoParser {
 	
 	private static DomParserUtils domUtils = new DomParserUtils(); 
 	
